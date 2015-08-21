@@ -20,13 +20,14 @@ import com.filipemarruda.bundle.Properties;
 public class S3BucketHandlerTest {
 
 	
+	private String accessKey = Properties.getString("AWSAccessKey");
+	private String secretKey = Properties.getString("AWSSecretKey");
+	
 	@Test
 	public void testS3BucketHandler_1()
 		throws Exception {
-		String accessKey = Properties.getString("AWSAccessKey");
-		String secretKey = Properties.getString("AWSSecretKey");
 
-		S3BucketHandler result = new S3BucketHandler(accessKey, secretKey);
+		final S3BucketHandler result = new S3BucketHandler(accessKey, secretKey);
 
 		assertNotNull(result);
 		assertEquals(accessKey, result.getAccessKey());
@@ -36,13 +37,10 @@ public class S3BucketHandlerTest {
 	@Test(expected = com.amazonaws.AmazonClientException.class)
 	public void testPutObject_1()
 		throws Exception {
-
-		String accessKey = "";
-		String secretKey = "";
 		
-		S3BucketHandler fixture = new S3BucketHandler(accessKey, secretKey);
-		String bucket = "";
-		File file = createSampleFile();
+		final S3BucketHandler fixture = new S3BucketHandler("", "");
+		final String bucket = "";
+		final File file = createSampleFile();
 
 		fixture.putObject(bucket, file);
 
@@ -51,15 +49,11 @@ public class S3BucketHandlerTest {
 	@Test
 	public void testPutObject_2()
 		throws Exception {
-
-		String accessKey = Properties.getString("AWSAccessKey");
-		String secretKey = Properties.getString("AWSSecretKey");
 		
-		S3BucketHandler fixture = new S3BucketHandler(accessKey, secretKey);
-		String bucket = "filipemarruda-s3-bucket";
-		File file = createSampleFile();
-
-		String key = fixture.putObject(bucket, file);
+		final S3BucketHandler fixture = new S3BucketHandler(accessKey, secretKey);
+		final String bucket = "filipemarruda-s3-bucket";
+		final File file = createSampleFile();
+		final String key = fixture.putObject(bucket, file);
 		
 		assertNotNull(key);
 
@@ -85,10 +79,12 @@ public class S3BucketHandlerTest {
 	
 
     private static File createSampleFile() throws IOException {
-        File file = File.createTempFile("aws-java-sdk-", ".txt");
-        file.deleteOnExit();
 
-        Writer writer = new OutputStreamWriter(new FileOutputStream(file));
+    	final File file = File.createTempFile("aws-java-sdk-", ".txt");
+        file.deleteOnExit();
+        
+        final Writer writer = new OutputStreamWriter(new FileOutputStream(file));
+
         writer.write("abcdefghijklmnopqrstuvwxyz\n");
         writer.write("01234567890112345678901234\n");
         writer.write("!@#$%^&*()-=[]{};':',.<>/?\n");
