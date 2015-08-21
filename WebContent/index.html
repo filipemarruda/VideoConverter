@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<title>Hello AWS Web World!</title>
+<link rel="stylesheet" href="styles/styles.css" type="text/css"
+	media="screen">
+</head>
+
+<body>
+	<div id="content" class="container">
+
+		<div style="height: 10px;"></div>
+
+		<h3>Video Converter</h3>
+		<p>Welcome to newest video-converter web service</p>
+
+		<h4>Contents of this Project</h4>
+
+		<p>This service is hosted on amazon web services and uses
+			encoding.com video converter service. When you upload your video file
+			this is saved in an arbitrary amazon s3 bucket and a request to the
+			encoding.com converter workers is triggered. This ones will convert
+			your video and put back to the amazon s3 bucket in the mp4 format,
+			ready to be played by any web browser player. After that we will
+			redirect you to a page witch contains a HTML5 video tag pointing to
+			the converted video.</p>
+
+		<p>Enjoy your experience!</p>
+
+		<form action="convert.do" method="post" enctype="multipart/form-data">
+			<input type="file" name="videoFile"><br> <input
+				type="submit" value="Submit video">
+		</form>
+
+		<div class="progress">
+			<div class="bar"></div>
+			<div class="percent">0%</div>
+		</div>
+
+		<div id="status"></div>
+	</div>
+	<script src="js/jquery.js"></script>
+	<script src="js/jquery.form.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>
