@@ -27,19 +27,23 @@ public class HttpConnectorTest {
 	
 	@Test
 	public void simplePost_2() throws Exception{
-		String response = httpConnector.simplePost(Properties.getString("EncodingEndpoint"), "");
+		
+		final String response = httpConnector.simplePost(Properties.getString("EncodingEndpoint"), "");
 		assertTrue(response.contains("error"));
+		
 	}
 	
 	@Test
 	public void simplePost_3() throws Exception{
-		String response = httpConnector.simplePost(Properties.getString("EncodingEndpoint"), mockGetInfoPayload());
+		
+		final String response = httpConnector.simplePost(Properties.getString("EncodingEndpoint"), mockGetInfoPayload());
 		assertFalse(response.contains("error"));
+		
 	}
 	
 	private String mockGetInfoPayload() throws UnsupportedEncodingException{
 		
-		String xml = String.format(
+		final String xml = String.format(
 			Properties.getString("EncodingGetMediaInfoXML"),
 			Properties.getString("EncodingUserId"),
 			Properties.getString("EncodingUserKey"),
@@ -48,4 +52,5 @@ public class HttpConnectorTest {
 		
 		return "xml=" + URLEncoder.encode(xml, "UTF8");
 	}
+	
 }

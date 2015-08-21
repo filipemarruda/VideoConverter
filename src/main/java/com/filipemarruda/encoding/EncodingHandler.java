@@ -22,14 +22,14 @@ public class EncodingHandler {
 	
 	public String getMediaInfo(final String mediaId) throws IOException{
 		
-		String xml = String.format(
+		final String xml = String.format(
 			Properties.getString("EncodingGetMediaInfoXML"),
 			userId,
 			userKey,
 			mediaId
 		);
 			
-		String payload = "xml=" + URLEncoder.encode(xml, "UTF8");
+		final String payload = "xml=" + URLEncoder.encode(xml, "UTF8");
 		
 		return getHttpConnector().simplePost(encodingEndpoint, payload);
 		
@@ -37,7 +37,7 @@ public class EncodingHandler {
 	
 	public String addMedia(final String source, final String destination) throws IOException{
 		
-		String xml = String.format(
+		final String xml = String.format(
 			Properties.getString("EncodingAddMediaXML"),
 			userId,
 			userKey,
@@ -45,7 +45,7 @@ public class EncodingHandler {
 			destination
 		);
 			
-		String payload = "xml=" + URLEncoder.encode(xml, "UTF8");
+		final String payload = "xml=" + URLEncoder.encode(xml, "UTF8");
 		
 		return getHttpConnector().simplePost(encodingEndpoint, payload);
 		

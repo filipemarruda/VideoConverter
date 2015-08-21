@@ -40,7 +40,7 @@ public class S3BucketHandler {
 	public String putObject(final String bucket, final File file) throws AmazonServiceException, AmazonClientException, InterruptedException{
 		
 		final String key = UUID.randomUUID().toString();
-		Upload upload = this.tm.upload(new PutObjectRequest(bucket, key, file));
+		final Upload upload = this.tm.upload(new PutObjectRequest(bucket, key, file));
 		upload.waitForCompletion();
 		return key;
 		
