@@ -33,4 +33,20 @@ public class EcodingHandler {
 		
 	}
 	
+	public String addMedia(final String source, final String destination) throws IOException{
+		
+		String xml = String.format(
+			Properties.getString("EncodingAddMediaXML"),
+			userId,
+			userKey,
+			source,
+			destination
+		);
+			
+		String payload = "xml=" + URLEncoder.encode(xml, "UTF8");
+		
+		return HttpConnector.simplePost(encodingEndpoint, payload);
+		
+	}
+	
 }
