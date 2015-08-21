@@ -6,26 +6,34 @@ import static org.junit.Assert.assertTrue;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.filipemarruda.bundle.Properties;
 
 public class HttpConnectorTest {
 	
+	private IHttpConnector httpConnector;
+	
+	@Before
+	public void setUp(){
+		httpConnector = new HttpConnector();
+	}
+	
 	@Test(expected=java.io.IOException.class)
 	public void simplePost_1() throws Exception{
-		HttpConnector.simplePost("", "");
+		httpConnector.simplePost("", "");
 	}
 	
 	@Test
 	public void simplePost_2() throws Exception{
-		String response = HttpConnector.simplePost(Properties.getString("EncodingEndpoint"), "");
+		String response = httpConnector.simplePost(Properties.getString("EncodingEndpoint"), "");
 		assertTrue(response.contains("error"));
 	}
 	
 	@Test
 	public void simplePost_3() throws Exception{
-		String response = HttpConnector.simplePost(Properties.getString("EncodingEndpoint"), mockGetInfoPayload());
+		String response = httpConnector.simplePost(Properties.getString("EncodingEndpoint"), mockGetInfoPayload());
 		assertFalse(response.contains("error"));
 	}
 	

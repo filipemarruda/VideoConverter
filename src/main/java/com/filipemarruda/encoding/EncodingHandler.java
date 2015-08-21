@@ -5,14 +5,16 @@ import java.net.URLEncoder;
 
 import com.filipemarruda.bundle.Properties;
 import com.filipemarruda.http.HttpConnector;
+import com.filipemarruda.http.IHttpConnector;
 
-public class EcodingHandler {
+public class EncodingHandler {
 	
 	private final String encodingEndpoint;
 	private final String userId;
 	private final String userKey;
-	
-	public EcodingHandler(final String encodingEndpoint, final String userId, final String userKey){
+	private IHttpConnector httpConnector;
+
+	public EncodingHandler(final String encodingEndpoint, final String userId, final String userKey){
 		this.encodingEndpoint = encodingEndpoint;
 		this.userId = userId;
 		this.userKey = userKey;
@@ -29,7 +31,7 @@ public class EcodingHandler {
 			
 		String payload = "xml=" + URLEncoder.encode(xml, "UTF8");
 		
-		return HttpConnector.simplePost(encodingEndpoint, payload);
+		return getHttpConnector().simplePost(encodingEndpoint, payload);
 		
 	}
 	
@@ -45,8 +47,20 @@ public class EcodingHandler {
 			
 		String payload = "xml=" + URLEncoder.encode(xml, "UTF8");
 		
-		return HttpConnector.simplePost(encodingEndpoint, payload);
+		return getHttpConnector().simplePost(encodingEndpoint, payload);
 		
+	}
+	
+	protected IHttpConnector getHttpConnector() {
+		if(httpConnector == null){
+			this.httpConnector = new HttpConnector();
+		}
+		return httpConnector;
+	}
+
+	// Just for testing
+	protected void setHttpConnector(IHttpConnector httpConnector) {
+		this.httpConnector = httpConnector;
 	}
 	
 }

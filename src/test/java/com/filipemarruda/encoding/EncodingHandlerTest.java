@@ -1,20 +1,36 @@
 package com.filipemarruda.encoding;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import com.filipemarruda.bundle.Properties;
+import com.filipemarruda.http.HttpConnector;
+import com.filipemarruda.http.IHttpConnector;
 
 public class EncodingHandlerTest {
-
+	
+	@Mock
+	private IHttpConnector httpConnector;
+	
+	@Before
+	public void setUp(){
+		httpConnector = mock(HttpConnector.class);
+	}
+	
 	@Test(expected=java.io.IOException.class)
 	public void getMediaInfo_1() throws Exception{
 		
 		final String mediaId = "";
-		EcodingHandler eH = new EcodingHandler(
+		EncodingHandler eH = new EncodingHandler(
 				"",
 				"",
 				"");
@@ -26,10 +42,7 @@ public class EncodingHandlerTest {
 	public void getMediaInfo_2() throws Exception{
 		
 		final String mediaId = "";
-		EcodingHandler eH = new EcodingHandler(
-				Properties.getString("EncodingEndpoint"),
-				Properties.getString("EncodingUserId"),
-				Properties.getString("EncodingUserKey"));
+		EncodingHandler eH =createEncodingHandlerMock();
 		
 		String response = eH.getMediaInfo(mediaId);
 		
@@ -43,7 +56,7 @@ public class EncodingHandlerTest {
 		final String source = "";
 		final String destination = "";
 		
-		EcodingHandler eH = new EcodingHandler(
+		EncodingHandler eH = new EncodingHandler(
 				"",
 				"",
 				"");
@@ -54,13 +67,8 @@ public class EncodingHandlerTest {
 	@Test
 	public void addMedia_2() throws Exception{
 		
-		EcodingHandler eH = new EcodingHandler(
-				Properties.getString("EncodingEndpoint"),
-				Properties.getString("EncodingUserId"),
-				Properties.getString("EncodingUserKey"));
-		
-		String response = eH.addMedia("", "");;
-		
+		EncodingHandler eH = createEncodingHandlerMock();
+		String response = eH.addMedia("", "");
 		assertTrue(response.contains("error"));
 		
 	}
@@ -68,6 +76,29 @@ public class EncodingHandlerTest {
 	@Test
 	public void addMedia_3() throws Exception{
 		
+		when(httpConnector.simplePost(Properties.getString("EncodingEndpoint"), createMockPayload()))
+		.thenReturn("Success");
+		
+		final String source = createSouceMock();
+		final String destination = createDestinationMock();
+		final EncodingHandler eH = createEncodingHandlerMock();
+		// injecting mock
+		eH.setHttpConnector(httpConnector);
+		final String response = eH.addMedia(source, destination);
+		assertFalse(response.contains("error"));
+		
+	}
+	
+	private EncodingHandler createEncodingHandlerMock(){
+		
+		EncodingHandler eH = new EncodingHandler(
+				Properties.getString("EncodingEndpoint"),
+				Properties.getString("EncodingUserId"),
+				Properties.getString("EncodingUserKey"));
+		return eH;
+	}
+	
+	private String createSouceMock() throws UnsupportedEncodingException{
 		final String source = String.format(
 				Properties.getString("S3FileEndpoint"),
 				URLEncoder.encode(Properties.getString("AWSAccessKey"), "UTF-8"),
@@ -75,6 +106,10 @@ public class EncodingHandlerTest {
 				Properties.getString("S3Bucket"),
 				"20150820_135352.wmv");
 		
+		return source;
+	}
+	
+	private String createDestinationMock() throws UnsupportedEncodingException{
 		final String destination = String.format(
 				Properties.getString("S3FileEndpoint"),
 				URLEncoder.encode(Properties.getString("AWSAccessKey"), "UTF-8"),
@@ -82,15 +117,20 @@ public class EncodingHandlerTest {
 				Properties.getString("S3Bucket"),
 				"20150820_135352.mp4");
 		
-		EcodingHandler eH = new EcodingHandler(
-				Properties.getString("EncodingEndpoint"),
-				Properties.getString("EncodingUserId"),
-				Properties.getString("EncodingUserKey"));
-		
-		String response = eH.addMedia(source, destination);;
-		System.out.println(response);
-		assertFalse(response.contains("error"));
-		
+		return destination;
+	}
+	
+	private String createMockPayload() throws UnsupportedEncodingException{
+		String xml = String.format(
+			Properties.getString("EncodingAddMediaXML"),
+			Properties.getString("EncodingUserId"),
+			Properties.getString("EncodingUserKey"),
+			createSouceMock(),
+			createDestinationMock()
+		);
+				
+		String payload = "xml=" + URLEncoder.encode(xml, "UTF8");
+		return payload;
 	}
 	
 }

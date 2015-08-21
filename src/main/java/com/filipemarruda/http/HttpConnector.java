@@ -1,15 +1,13 @@
 package com.filipemarruda.http;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class HttpConnector {
+public class HttpConnector implements IHttpConnector {
 	
-	public static String simplePost(final String url, final String payload) throws IOException{
+	public String simplePost(final String url, final String payload) throws IOException{
 		
 		String result = null;
 			
@@ -20,7 +18,7 @@ public class HttpConnector {
 		urlConnection.setConnectTimeout(60000);			
 		urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 		
-		try(final BufferedWriter out = new BufferedWriter(new OutputStreamWriter( urlConnection.getOutputStream() ))){
+		try(final java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.OutputStreamWriter( urlConnection.getOutputStream() ))){
 			
 			out.write(payload);			
 			out.flush();
@@ -29,7 +27,7 @@ public class HttpConnector {
 		
 		urlConnection.connect();	
 		
-		try (final InputStream is = urlConnection.getInputStream()){	
+		try (final java.io.InputStream is = urlConnection.getInputStream()){	
 
 			final StringBuffer strbuf = new StringBuffer();		
 			final byte[] buffer = new byte[1024 * 4];

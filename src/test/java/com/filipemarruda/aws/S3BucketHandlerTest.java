@@ -2,6 +2,7 @@ package com.filipemarruda.aws;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,6 +12,7 @@ import java.io.Writer;
 
 import org.junit.Test;
 
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.S3Object;
 import com.filipemarruda.bundle.Properties;
 
@@ -35,8 +37,8 @@ public class S3BucketHandlerTest {
 	public void testPutObject_1()
 		throws Exception {
 
-		String accessKey = Properties.getString("");
-		String secretKey = Properties.getString("");
+		String accessKey = "";
+		String secretKey = "";
 		
 		S3BucketHandler fixture = new S3BucketHandler(accessKey, secretKey);
 		String bucket = "";
@@ -66,6 +68,18 @@ public class S3BucketHandlerTest {
 		assertNotNull(object);
 		
 		fixture.deleteObject(bucket, key);
+		
+		object = null;
+		
+		try{
+			
+			object = fixture.getObject(bucket, key);
+			
+		}catch(AmazonS3Exception e){
+			
+			assertTrue(e.getMessage().contains("The specified key does not exist."));
+			
+		}
 
 	}
 	
