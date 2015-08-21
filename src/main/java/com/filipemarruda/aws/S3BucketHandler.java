@@ -3,6 +3,8 @@ package com.filipemarruda.aws;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.UUID;
 
 import com.amazonaws.AmazonClientException;
@@ -17,15 +19,31 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
+import com.filipemarruda.bundle.Properties;
 
 public class S3BucketHandler {
 
+	
 	private final TransferManager tm;
 	private final AmazonS3 s3;
 
 	private final AWSCredentials credentials;
 	private final String accessKey;
 	private final String secretKey;
+	
+	public String createFileEndpoint(final String bucketUrl, final String fileName) throws UnsupportedEncodingException{
+		
+		final String source = String.format(
+				Properties.getString("S3FileEndpoint"),
+				URLEncoder.encode(accessKey, "UTF-8"),
+				URLEncoder.encode(secretKey, "UTF-8"),
+				bucketUrl,
+				fileName);
+		
+		return source;
+		
+	}
+	
 	
 	public S3BucketHandler(final String accessKey, final String secretKey){
 		
@@ -41,8 +59,8 @@ public class S3BucketHandler {
 	
 	public String putObject(final String bucket, final File file, final String extension) throws AmazonServiceException, AmazonClientException, InterruptedException, FileNotFoundException, IOException{
 
-		final String key = UUID.randomUUID().toString() + extension;
-		final Upload upload = this.tm.upload(new PutObjectRequest(bucket, key, file));
+		final String key = UUID.randomUUID().toString();
+		final Upload upload = this.tm.upload(new PutObjectRequest(bucket, key + extension, file));
 		upload.waitForCompletion();
 		return key;
 		

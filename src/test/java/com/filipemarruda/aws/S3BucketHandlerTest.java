@@ -57,17 +57,17 @@ public class S3BucketHandlerTest {
 		
 		assertNotNull(key);
 
-		S3Object object = fixture.getObject(bucket, key);
+		S3Object object = fixture.getObject(bucket, key + ".txt");
 		
 		assertNotNull(object);
 		
-		fixture.deleteObject(bucket, key);
+		fixture.deleteObject(bucket, key + ".txt");
 		
 		object = null;
 		
 		try{
 			
-			object = fixture.getObject(bucket, key);
+			object = fixture.getObject(bucket, key + ".txt");
 			
 		}catch(AmazonS3Exception e){
 			
