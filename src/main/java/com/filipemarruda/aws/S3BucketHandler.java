@@ -1,6 +1,8 @@
 package com.filipemarruda.aws;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.UUID;
 
 import com.amazonaws.AmazonClientException;
@@ -37,9 +39,9 @@ public class S3BucketHandler {
 		
 	}
 	
-	public String putObject(final String bucket, final File file) throws AmazonServiceException, AmazonClientException, InterruptedException{
-		
-		final String key = UUID.randomUUID().toString();
+	public String putObject(final String bucket, final File file, final String extension) throws AmazonServiceException, AmazonClientException, InterruptedException, FileNotFoundException, IOException{
+
+		final String key = UUID.randomUUID().toString() + extension;
 		final Upload upload = this.tm.upload(new PutObjectRequest(bucket, key, file));
 		upload.waitForCompletion();
 		return key;
@@ -51,7 +53,7 @@ public class S3BucketHandler {
 		return this.s3.getObject(new GetObjectRequest(bucket, key));
 		
 	}
-
+	
 	public void deleteObject(final String bucket, final String key){
 		this.s3.deleteObject(bucket, key);
 	}

@@ -42,7 +42,7 @@ public class S3BucketHandlerTest {
 		final String bucket = "";
 		final File file = createSampleFile();
 
-		fixture.putObject(bucket, file);
+		fixture.putObject(bucket, file, ".txt");
 
 	}
 	
@@ -53,7 +53,7 @@ public class S3BucketHandlerTest {
 		final S3BucketHandler fixture = new S3BucketHandler(accessKey, secretKey);
 		final String bucket = "filipemarruda-s3-bucket";
 		final File file = createSampleFile();
-		final String key = fixture.putObject(bucket, file);
+		final String key = fixture.putObject(bucket, file, ".txt");
 		
 		assertNotNull(key);
 
