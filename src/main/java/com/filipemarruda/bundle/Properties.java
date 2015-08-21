@@ -16,6 +16,7 @@ public class Properties {
 		try {
 			return RESOURCE_BUNDLE.getString(key);
 		} catch (MissingResourceException e) {
+			e.printStackTrace();
 			return '!' + key + '!';
 		}
 	}
