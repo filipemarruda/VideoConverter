@@ -1,34 +1,34 @@
-package com.filipemarruda;
+package com.filipemarruda.bundle;
 
 import org.junit.*;
 import static org.junit.Assert.*;
 
 /**
- * The class <code>CalculatorTest</code> contains tests for the class <code>{@link Calculator}</code>.
+ * The class <code>PropertiesTest</code> contains tests for the class <code>{@link Properties}</code>.
  *
- * @generatedBy CodePro at 20/08/15 22:54
+ * @generatedBy CodePro at 20/08/15 23:25
  * @author F28870B
  * @version $Revision: 1.0 $
  */
-public class CalculatorTest {
+public class PropertiesTest {
 	/**
-	 * Run the int sum(int,int) method test.
+	 * Run the String getString(String) method test.
 	 *
 	 * @throws Exception
 	 *
-	 * @generatedBy CodePro at 20/08/15 22:54
+	 * @generatedBy CodePro at 20/08/15 23:25
 	 */
 	@Test
-	public void testSum_1()
+	public void testGetString_1()
 		throws Exception {
-		Calculator fixture = new Calculator();
-		int a = 1;
-		int b = 1;
+		String key = "AWSSecretKey";
 
-		int result = fixture.sum(a, b);
+		String result = Properties.getString(key);
 
 		// add additional test code here
-		assertEquals(2, result);
+		// An unexpected exception was thrown in user code while executing this test:
+		//    java.lang.ExceptionInInitializerError
+		assertNotNull(result);
 	}
 
 	/**
@@ -37,7 +37,7 @@ public class CalculatorTest {
 	 * @throws Exception
 	 *         if the initialization fails for some reason
 	 *
-	 * @generatedBy CodePro at 20/08/15 22:54
+	 * @generatedBy CodePro at 20/08/15 23:25
 	 */
 	@Before
 	public void setUp()
@@ -51,7 +51,7 @@ public class CalculatorTest {
 	 * @throws Exception
 	 *         if the clean-up fails for some reason
 	 *
-	 * @generatedBy CodePro at 20/08/15 22:54
+	 * @generatedBy CodePro at 20/08/15 23:25
 	 */
 	@After
 	public void tearDown()
@@ -64,9 +64,9 @@ public class CalculatorTest {
 	 *
 	 * @param args the command line arguments
 	 *
-	 * @generatedBy CodePro at 20/08/15 22:54
+	 * @generatedBy CodePro at 20/08/15 23:25
 	 */
 	public static void main(String[] args) {
-		new org.junit.runner.JUnitCore().run(CalculatorTest.class);
+		new org.junit.runner.JUnitCore().run(PropertiesTest.class);
 	}
 }
