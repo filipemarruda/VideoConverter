@@ -29,7 +29,7 @@ public class XMLParser {
 
 	public static String getMediaId(final String xml)
 			throws XPathExpressionException, ParserConfigurationException, SAXException, IOException {
-		return getStringFromXML("//mediaid", xml);
+		return getStringFromXML("//MediaID", xml);
 	}
 	
 	public static String getMediaFormatFromResponse(final String xml)
