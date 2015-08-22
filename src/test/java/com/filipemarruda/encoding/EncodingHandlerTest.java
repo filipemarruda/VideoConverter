@@ -1,7 +1,6 @@
 package com.filipemarruda.encoding;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -54,17 +53,6 @@ public class EncodingHandlerTest {
 	}
 
 	@Test(expected = java.io.IOException.class)
-	public void getStatus_2() throws Exception {
-
-		final String mediaId = "";
-		final EncodingHandler eH = createEncodingHandlerMock();
-		final String response = eH.getStatus(mediaId);
-
-		assertTrue(response.contains("error"));
-
-	}
-
-	@Test(expected = java.io.IOException.class)
 	public void addMedia_1() throws Exception {
 
 		final String source = "";
@@ -99,16 +87,6 @@ public class EncodingHandlerTest {
 		final String destination = "";
 
 		eHWrong.addMediaBenchmark(source, destination);
-
-	}
-
-	@Test(expected = java.io.IOException.class)
-	public void addMediaBenchmark_2() throws Exception {
-
-		final EncodingHandler eH = createEncodingHandlerMock();
-		final String response = eH.addMediaBenchmark("", "");
-
-		assertTrue(response.contains("error"));
 
 	}
 
