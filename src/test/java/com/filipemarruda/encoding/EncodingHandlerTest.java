@@ -36,35 +36,12 @@ public class EncodingHandlerTest {
 
 	}
 
-	@Test
-	public void getMediaInfo_2() throws Exception {
-
-		final String mediaId = "";
-		final EncodingHandler eH = createEncodingHandlerMock();
-		final String response = eH.getMediaInfo(mediaId);
-
-		assertTrue(response.contains("error"));
-
-	}
-
 	@Test(expected=java.net.MalformedURLException.class)
 	public void processMedia_1() throws Exception {
 
 		final String mediaId = "";
 		final String format = "";
 		eHWrong.processMedia(mediaId, format);
-
-	}
-
-	@Test
-	public void processMedia_2() throws Exception {
-
-		final String mediaId = "";
-		final String format = "";
-		final EncodingHandler eH = createEncodingHandlerMock();
-		final String response = eH.processMedia(mediaId, format);
-
-		assertTrue(response.contains("error"));
 
 	}
 
@@ -94,16 +71,6 @@ public class EncodingHandlerTest {
 		final String destination = "";
 
 		eHWrong.addMedia(source, destination);
-
-	}
-
-	@Test
-	public void addMedia_2() throws Exception {
-
-		final EncodingHandler eH = createEncodingHandlerMock();
-		final String response = eH.addMedia("", "");
-
-		assertTrue(response.contains("error"));
 
 	}
 
