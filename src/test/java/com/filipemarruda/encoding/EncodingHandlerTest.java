@@ -18,6 +18,8 @@ import com.filipemarruda.http.IHttpConnector;
 
 public class EncodingHandlerTest {
 	
+	final EncodingHandler eHWrong = new EncodingHandler("","","");
+	
 	@Mock
 	private IHttpConnector httpConnector;
 	
@@ -30,8 +32,7 @@ public class EncodingHandlerTest {
 	public void getMediaInfo_1() throws Exception{
 		
 		final String mediaId = "";
-		final EncodingHandler eH = new EncodingHandler("","","");
-		eH.getMediaInfo(mediaId);
+		eHWrong.getMediaInfo(mediaId);
 		
 	}
 	
@@ -47,13 +48,52 @@ public class EncodingHandlerTest {
 	}
 	
 	@Test(expected=java.io.IOException.class)
+	public void processMedia_1() throws Exception{
+		
+		final String mediaId = "";
+		final String format = "";
+		eHWrong.processMedia(mediaId, format);
+		
+	}
+	
+	@Test(expected=java.io.IOException.class)
+	public void processMedia_2() throws Exception{
+		
+		final String mediaId = "";
+		final String format = "";
+		final EncodingHandler eH = createEncodingHandlerMock();
+		final String response = eH.processMedia(mediaId, format);
+		
+		assertTrue(response.contains("error"));
+		
+	}
+	
+	@Test(expected=java.io.IOException.class)
+	public void getStatus_1() throws Exception{
+		
+		final String mediaId = "";
+		eHWrong.getStatus(mediaId);
+		
+	}
+	
+	@Test
+	public void getStatus_2() throws Exception{
+		
+		final String mediaId = "";
+		final EncodingHandler eH = createEncodingHandlerMock();
+		final String response = eH.getStatus(mediaId);
+		
+		assertTrue(response.contains("error"));
+		
+	}
+	
+	@Test(expected=java.io.IOException.class)
 	public void addMedia_1() throws Exception{
 		
 		final String source = "";
 		final String destination = "";
-		final EncodingHandler eH = new EncodingHandler("","","");
 		
-		eH.addMedia(source, destination);
+		eHWrong.addMedia(source, destination);
 		
 	}
 	
@@ -80,6 +120,44 @@ public class EncodingHandlerTest {
 		final String source = createSouceMock();
 		final String destination = createDestinationMock();
 		final String response = eH.addMedia(source, destination);
+		
+		assertFalse(response.contains("error"));
+		
+	}
+	
+	@Test(expected=java.io.IOException.class)
+	public void addMediaBenchmark_1() throws Exception{
+		
+		final String source = "";
+		final String destination = "";
+		
+		eHWrong.addMediaBenchmark(source, destination);
+		
+	}
+	
+	@Test
+	public void addMediaBenchmark_2() throws Exception{
+		
+		final EncodingHandler eH = createEncodingHandlerMock();
+		final String response = eH.addMediaBenchmark("", "");
+		
+		assertTrue(response.contains("error"));
+		
+	}
+	
+	@Test
+	public void addMediaBenchmark_3() throws Exception{
+		
+		// setup mocks
+		when(httpConnector.simplePost(Properties.getString("EncodingEndpoint"), createMockPayload()))
+			.thenReturn("Success");
+		final EncodingHandler eH = createEncodingHandlerMock();
+		// injecting mock
+		eH.setHttpConnector(httpConnector);
+		
+		final String source = createSouceMock();
+		final String destination = createDestinationMock();
+		final String response = eH.addMediaBenchmark(source, destination);
 		
 		assertFalse(response.contains("error"));
 		
