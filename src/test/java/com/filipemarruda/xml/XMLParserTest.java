@@ -31,11 +31,11 @@ public class XMLParserTest {
 	}
 	
 	private String createMockXML(){
-		return "<?xml version='1.0'?><query><userid>userId</userid><userkey>userKey</userkey><action>GetMediaInfo</action><mediaid>mediaId</mediaid></query>";
+		return "<?xml version='1.0'?><query><userid>userId</userid><userkey>userKey</userkey><action>GetMediaInfo</action><MediaID>mediaId</MediaID></query>";
 	}
 	
 	private String createFailMockXML(){
-		return "<?xml version='1.0'?><query><userid>userId</userid><userkey>userKey</userkey><action>GetMediaInfo</action><mediaid>mediaId</mediaid></query";
+		return "<?xml version='1.0'?><query><userid>userId</userid><userkey>userKey</userkey><action>GetMediaInfo</action><MediaID>mediaId</MediaID></query";
 	}
 	
 	private String createResponseMockXML(){
