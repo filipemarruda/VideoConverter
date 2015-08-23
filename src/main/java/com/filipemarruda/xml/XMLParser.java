@@ -2,8 +2,6 @@ package com.filipemarruda.xml;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -32,18 +30,35 @@ public class XMLParser {
 		return getStringFromXML("//MediaID", xml);
 	}
 	
+	public static String getMediaStatus(final String xml)
+			throws XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+		return getStringFromXML("//status", xml);
+	}
+	
+	public static String getDestination(final String xml)
+			throws XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+		return getStringFromXML("//destination", xml);
+	}
+	
+	public static String getProcessMediaMessage(final String xml)
+			throws XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+		return getStringFromXML("//message", xml);
+	}
+	
 	public static String getMediaFormatFromResponse(final String xml)
 			throws XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		
-		final Pattern pattern = Pattern.compile("<response>(.*)</response>");
-		final Matcher matcher = pattern.matcher(xml);
-		String response = null;
+		final StringBuilder format = new StringBuilder();
 		
-		while (matcher.find()) {
-			response = matcher.group(1);
-	    }
+		format.append("<output>mp4</output>");
+		format.append("<bitrate>"+getStringFromXML("//bitrate", xml)+"</bitrate>");
+		format.append("<duration>"+getStringFromXML("//duration", xml)+"</duration>");
+		format.append("<size>0x360</size>");
+		format.append("<bitrate>512k</bitrate>");
+		format.append("<audio_bitrate>64k</audio_bitrate>");
+		format.append("<preset>2</preset>");
 		
-		return response;
+		return format.toString();
 	}
 
 	private static String getStringFromXML(final String xpath, final String xml)
