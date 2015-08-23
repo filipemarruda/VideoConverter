@@ -63,19 +63,6 @@ div#content div.section ul li {
 	line-height: 1.5em;
 }
 
-/* Section titles */
-div#content div.section.s3 h2 {
-	background-image: url(../images/drive.png);
-}
-
-div#content div.section.ec2 h2 {
-	background-image: url(../images/server.png);
-}
-
-div#content div.section.sdb h2 {
-	background-image: url(../images/database.png);
-}
-
 
 /*************************************
 CONTAINERS
