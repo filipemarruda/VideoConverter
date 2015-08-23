@@ -11,11 +11,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+
+import org.xml.sax.SAXException;
 
 import com.amazonaws.AmazonClientException;
 import com.filipemarruda.aws.S3BucketHandler;
 import com.filipemarruda.bundle.Properties;
-import com.filipemarruda.encoding.EncodingHandler;
+import com.filipemarruda.encoding.MediaWorkflow;
 import com.filipemarruda.file.FileHandler;
 import com.filipemarruda.http.RequestHelper;
 
@@ -23,6 +27,10 @@ import com.filipemarruda.http.RequestHelper;
 @MultipartConfig
 public class Convert extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private final S3BucketHandler s3 = new S3BucketHandler(Properties.getString("AWSAccessKey"), Properties.getString("AWSSecretKey"));
+	private final MediaWorkflow mW = new MediaWorkflow(Properties.getString("EncodingEndpoint"), Properties.getString("EncodingUserId"), Properties.getString("EncodingUserKey"));
+    
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -35,8 +43,40 @@ public class Convert extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath()); //$NON-NLS-1$
+		
+		final PrintWriter out = response.getWriter();
+		final String mediaId = request.getParameter("mediaId");
+		
+		try {
+			
+			if(mediaId != null && !"".equals(mediaId)){
+
+				String status = mW.getStatus(mediaId);
+				
+				if("Ready to process".equals(status)){
+
+					status = mW.process(mediaId);
+					
+				}
+				
+				String destination = null;
+				
+				if("Finished".equals(status)){
+					
+					destination = mW.getDestination(mediaId);
+					
+				}
+				
+				out.append(" {\"status\" : \""+status+"\", \"destination\" : \""+destination+"\"}");
+				
+			}
+			
+			
+			
+		} catch (XPathExpressionException | ParserConfigurationException | SAXException | InterruptedException e) {
+			out.write("{ \"error\" : \"" + e.getMessage() + "\" }");
+		}
+		
 	}
 
 	/**
@@ -51,24 +91,16 @@ public class Convert extends HttpServlet {
 		final String filename = RequestHelper.extractFileName(filePart);
 		final String extension = filename.substring(filename.lastIndexOf("."));
 		
-		
-		final S3BucketHandler s3 = new S3BucketHandler(Properties.getString("AWSAccessKey"), Properties.getString("AWSSecretKey"));
-		final EncodingHandler eH = new EncodingHandler(Properties.getString("EncodingEndpoint"), Properties.getString("EncodingUserId"), Properties.getString("EncodingUserKey"));
-	    
 	    try( InputStream fileContent = filePart.getInputStream()) {
 	    	
 	    	final String s3File = s3.putObject(bucketName, FileHandler.inputStreamToFile(fileContent), extension);
 	    	final String source = s3.createFileEndpoint(bucketUrl, s3File + extension);
-	    	final String destination = s3.createFileEndpoint(bucketUrl, s3File + ".wmv");
+	    	final String destination = s3.createFileEndpoint(bucketUrl, s3File + ".mp4");
+	    	final String mediaId = mW.start(source, destination);
+	    	out.write("{ \"mediaId\" : " + mediaId + "}");
 	    	
-	    	System.out.println("Source: " + source);
-	    	System.out.println("Destination: " + destination);
-	    	
-	    	final String mediaId = eH.addMedia(source, destination);
-	    	out.write("MediaId : "+mediaId);
-	    	
-	    } catch (AmazonClientException | InterruptedException e) {
-			e.printStackTrace();
+	    } catch (AmazonClientException | InterruptedException | XPathExpressionException | ParserConfigurationException | SAXException e) {
+	    	out.write("{ \"error\" : \"" + e.getMessage() + "\" }");
 		}    
 	    
 	}

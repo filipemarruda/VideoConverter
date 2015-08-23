@@ -29,17 +29,14 @@
 
 		<p>Enjoy your experience!</p>
 
-		<form action="convert.do" method="post" enctype="multipart/form-data">
-			<input type="file" name="videoFile"><br> <input
-				type="submit" value="Submit video">
+		<form id="videoForm" action="convert.do" method="post" enctype="multipart/form-data">
+			<input type="file" name="videoFile"><br> 
+			<input type="submit" value="Submit video">
 		</form>
 
-		<div class="progress">
-			<div class="bar"></div>
-			<div class="percent">0%</div>
-		</div>
-
+		<div id="loading"></div>
 		<div id="status"></div>
+		<div id="video"></div>
 	</div>
 	<script src="js/jquery.js"></script>
 	<script src="js/jquery.form.js"></script>
