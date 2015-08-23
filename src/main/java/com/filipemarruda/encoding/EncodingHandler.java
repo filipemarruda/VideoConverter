@@ -2,6 +2,7 @@ package com.filipemarruda.encoding;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.concurrent.TimeUnit;
 
 import com.filipemarruda.bundle.Properties;
 import com.filipemarruda.http.HttpConnector;
@@ -20,14 +21,14 @@ public class EncodingHandler {
 		this.userKey = userKey;
 	}
 
-	public String getMediaInfo(final String mediaId) throws IOException {
+	public String getMediaInfo(final String mediaId) throws IOException, InterruptedException {
 
 		final String xml = String.format(Properties.getString("EncodingGetMediaInfoXML"), userId, userKey, mediaId);
 		return performAPICall(xml);
 
 	}
 
-	public String addMedia(final String source, final String destination) throws IOException {
+	public String addMedia(final String source, final String destination) throws IOException, InterruptedException {
 
 		final String xml = String.format(Properties.getString("EncodingAddMediaXML"), userId, userKey, source,
 				destination);
@@ -35,7 +36,7 @@ public class EncodingHandler {
 
 	}
 
-	public String addMediaBenchmark(final String source, final String destination) throws IOException {
+	public String addMediaBenchmark(final String source, final String destination) throws IOException, InterruptedException {
 
 		final String xml = String.format(Properties.getString("EncodingAddMediaBenchmarkXML"), userId, userKey, source,
 				destination);
@@ -43,7 +44,7 @@ public class EncodingHandler {
 
 	}
 
-	public String processMedia(final String mediaId, final String format) throws IOException {
+	public String processMedia(final String mediaId, final String format) throws IOException, InterruptedException {
 
 		final String xml = String.format(Properties.getString("EncodingProcessMediaXML"), userId, userKey, mediaId,
 				format);
@@ -51,15 +52,18 @@ public class EncodingHandler {
 
 	}
 	
-	public String getStatus(final String mediaId) throws IOException {
+	public String getStatus(final String mediaId) throws IOException, InterruptedException {
 
 		final String xml = String.format(Properties.getString("EncodingGetStatusXML"), userId, userKey, mediaId);
 		return performAPICall(xml);
 		
 	}
 	
-	private String performAPICall(final String xml) throws IOException{
+	private String performAPICall(final String xml) throws IOException, InterruptedException{
 		
+		// confirm 1 request per second in encoding.com, free accounts
+		// avoiding 421 error from API
+		TimeUnit.SECONDS.sleep(1);
 		final String payload = "xml=" + URLEncoder.encode(xml, "UTF8");
 		return getHttpConnector().simplePost(encodingEndpoint, payload);
 	}
