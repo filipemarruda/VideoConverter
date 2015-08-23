@@ -42,7 +42,7 @@ public class MediaWorkflowTest {
 		// injecting mock
 		mediaWorkflow.setEncodingHandler(encodingHandler);
 		final String mediaId = mediaWorkflow.start(source, destination);
-		assertEquals(mediaId, 42348081);
+		assertEquals(mediaId, "42348081");
 		
 	}
 	
@@ -53,15 +53,15 @@ public class MediaWorkflowTest {
 		when(encodingHandler.getMediaInfo("42348081"))
 			.thenReturn("<response><bitrate>2050k</bitrate><duration>7.58</duration><audio_bitrate>64.0k</audio_bitrate><audio_duration>7.522</audio_duration><video_duration>7.522</video_duration><video_codec>wmv2 (WMV2 / 0x32564D57)</video_codec><size>1920x1080</size><audio_codec>wmav2</audio_codec><audio_sample_rate>44100</audio_sample_rate><audio_channels>2</audio_channels><frame_rate>30</frame_rate><format>windows media</format></response>");
 
-		when(encodingHandler.processMedia("42348081", "<bitrate>2050k</bitrate><duration>7.58</duration><audio_bitrate>64.0k</audio_bitrate><audio_duration>7.522</audio_duration><video_duration>7.522</video_duration><video_codec>wmv2 (WMV2 / 0x32564D57)</video_codec><size>1920x1080</size><audio_codec>wmav2</audio_codec><audio_sample_rate>44100</audio_sample_rate><audio_channels>2</audio_channels><frame_rate>30</frame_rate><format>windows media</format>"))
-			.thenReturn("Success");
+		when(encodingHandler.processMedia("42348081", "<output>mp4</output><bitrate>2050k</bitrate><duration>7.58</duration><size>0x360</size><bitrate>512k</bitrate><audio_bitrate>64k</audio_bitrate><preset>2</preset>"))
+			.thenReturn("<?xml version='1.0'?><response><message>Ok</message></response>");
 
 		
 		final MediaWorkflow mediaWorkflow = createMediaWorkflowMock();
 		// injecting mock
 		mediaWorkflow.setEncodingHandler(encodingHandler);
 		final String processMediaMessage = mediaWorkflow.process("42348081");
-		assertEquals(processMediaMessage, "Success");
+		assertEquals(processMediaMessage, "Ok");
 		
 	}
 	
@@ -91,7 +91,7 @@ public class MediaWorkflowTest {
 		// injecting mock
 		mediaWorkflow.setEncodingHandler(encodingHandler);
 		final String destination = mediaWorkflow.getDestination("42348081");
-		assertEquals(destination, "Destination");
+		assertEquals(destination, "http://Destination");
 		
 	}
 	
