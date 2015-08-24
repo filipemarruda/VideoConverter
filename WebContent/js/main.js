@@ -4,7 +4,27 @@
 	var status = $('#status');
 	var video = $('#video');
 	var videoForm = $('#videoForm');
-
+	var file = $('#file');
+	var submit = $('#submit');
+	
+	file.live('change', function(e){
+		
+		if(e.srcElement.files[0] && e.srcElement.files[0].type.match('video.*')){
+			
+			submit.removeAttr("disabled");
+			
+		}else{
+			
+			if(e.srcElement.files[0]){
+				alert("Please, select a video file!");
+				file.val("");
+			}
+			submit.attr("disabled", "disabled");
+			
+		}
+	  
+	});
+	
 	var ecodingWorkflow = function(mediaId){
 		
 		var url = "convert.do?mediaId=" + mediaId;
