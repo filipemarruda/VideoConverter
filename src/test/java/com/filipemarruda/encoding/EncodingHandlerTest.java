@@ -45,6 +45,8 @@ import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -62,22 +64,46 @@ public class EncodingHandlerTest {
 	/** The EncodingHandler with wrong parameters. */
 	final EncodingHandler eHWrong = new EncodingHandler("", "", "");
 
+	/** The source. */
+	private String source;
+
+	/** The destination. */
+	private String destination;
+
+	/** The EncodingHandler. */
+	private EncodingHandler eH;
+
 	/** The http connector. */
 	@Mock
 	private IHttpConnector httpConnector;
 
 	/**
 	 * Initiate the tests scenarios.
+	 * 
+	 * @throws IOException
 	 */
 	@Before
-	public void setUp() {
+	public void setUp() throws IOException {
 		httpConnector = mock(HttpConnector.class);
+		source = MockUtil.createFileEndpointMock("20150820_135352.wmv");
+		destination = MockUtil.createFileEndpointMock("20150820_135352.mp4");
+		eH = createEncodingHandlerMock();
+		// setup mocks
+		when(httpConnector.simplePost(Properties.getString("EncodingEndpoint"),
+				MockUtil.createMockPayload(Properties.getString("EncodingAddMediaXML"), source, destination)))
+						.thenReturn("Success");
+		when(httpConnector.simplePost(Properties.getString("EncodingEndpoint"),
+				MockUtil.createMockPayload(Properties.getString("EncodingAddMediaBenchmarkXML"), source, destination)))
+						.thenReturn("Success");
+		// injecting mock
+		eH.setHttpConnector(httpConnector);
 	}
 
 	/**
 	 * Test case for method getMediaInfo.
 	 *
-	 * @throws Exception the exception
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Test(expected = java.io.IOException.class)
 	public void getMediaInfo_1() throws Exception {
@@ -90,9 +116,10 @@ public class EncodingHandlerTest {
 	/**
 	 * Test case for method processMedia.
 	 *
-	 * @throws Exception the exception
+	 * @throws Exception
+	 *             the exception
 	 */
-	@Test(expected=java.net.MalformedURLException.class)
+	@Test(expected = java.net.MalformedURLException.class)
 	public void processMedia_1() throws Exception {
 
 		final String mediaId = "";
@@ -104,7 +131,8 @@ public class EncodingHandlerTest {
 	/**
 	 * Test case for method getStatus.
 	 *
-	 * @throws Exception the exception
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Test(expected = java.io.IOException.class)
 	public void getStatus_1() throws Exception {
@@ -117,37 +145,26 @@ public class EncodingHandlerTest {
 	/**
 	 * Test case for method addMedia.
 	 *
-	 * @throws Exception the exception
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Test(expected = java.io.IOException.class)
 	public void addMedia_1() throws Exception {
 
-		final String source = "";
-		final String destination = "";
-
-		eHWrong.addMedia(source, destination);
+		eHWrong.addMedia("", "");
 
 	}
 
 	/**
 	 * Test case for method addMedia.
 	 *
-	 * @throws Exception the exception
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Test
 	public void addMedia_3() throws Exception {
 
-		// setup mocks
-		when(httpConnector.simplePost(Properties.getString("EncodingEndpoint"),
-				MockUtil.createMockPayload(Properties.getString("EncodingAddMediaXML")))).thenReturn("Success");
-		final EncodingHandler eH = createEncodingHandlerMock();
-		// injecting mock
-		eH.setHttpConnector(httpConnector);
-
-		final String source = MockUtil.createSouceMock();
-		final String destination = MockUtil.createDestinationMock();
 		final String response = eH.addMedia(source, destination);
-
 		assertFalse(response.contains("error"));
 
 	}
@@ -155,43 +172,35 @@ public class EncodingHandlerTest {
 	/**
 	 * Test case for method addMediaBenchmark.
 	 *
-	 * @throws Exception the exception
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Test(expected = java.io.IOException.class)
 	public void addMediaBenchmark_1() throws Exception {
 
-		final String source = "";
-		final String destination = "";
-
-		eHWrong.addMediaBenchmark(source, destination);
+		eHWrong.addMediaBenchmark("", "");
 
 	}
 
 	/**
 	 * Test case for method addMediaBenchmark.
 	 *
-	 * @throws Exception the exception
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Test
 	public void addMediaBenchmark_3() throws Exception {
 
-		// setup mocks
-		when(httpConnector.simplePost(Properties.getString("EncodingEndpoint"),
-				MockUtil.createMockPayload(Properties.getString("EncodingAddMediaBenchmarkXML")))).thenReturn("Success");
-		final EncodingHandler eH = createEncodingHandlerMock();
-		// injecting mock
-		eH.setHttpConnector(httpConnector);
-
-		final String source = MockUtil.createSouceMock();
-		final String destination = MockUtil.createDestinationMock();
 		final String response = eH.addMediaBenchmark(source, destination);
-
 		assertFalse(response.contains("error"));
 
 	}
 
-
-	
+	/**
+	 * Creates the encoding handler mock.
+	 *
+	 * @return the encoding handler
+	 */
 	public static EncodingHandler createEncodingHandlerMock() {
 
 		final EncodingHandler eH = new EncodingHandler(Properties.getString("EncodingEndpoint"),
@@ -199,6 +208,5 @@ public class EncodingHandlerTest {
 		return eH;
 
 	}
-	
 
 }

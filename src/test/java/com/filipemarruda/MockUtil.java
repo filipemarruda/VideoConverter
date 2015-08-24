@@ -87,43 +87,30 @@ public class MockUtil {
 		return "<?xml version='1.0'?><response><id>42346299</id><userid>49677</userid><sourcefile>SourceFile</sourcefile><status>Processing</status><format><id>136610241</id><status>Processing</status><output>mp4</output><destination>Destination</destination></format><queue_time>0</queue_time></response>";
 	}
 
+	/**
+	 * Creates the process media response mock xml.
+	 *
+	 * @return the string
+	 */
 	public static String createProcessMediaResponseMockXML() {
 		return "<?xml version='1.0'?><response><message>Ok</message></response>";
 	}
 
 	/**
-	 * Creates the souce mock.
+	 * Creates the file endpoint mock.
 	 *
 	 * @return the string
 	 * @throws UnsupportedEncodingException
 	 *             the unsupported encoding exception
 	 */
-	public static String createSouceMock() throws UnsupportedEncodingException {
+	public static String createFileEndpointMock(final String filename) throws UnsupportedEncodingException {
 
 		final String source = String.format(Properties.getString("S3FileEndpoint"),
 				URLEncoder.encode(Properties.getString("AWSAccessKey"), "UTF-8"),
 				URLEncoder.encode(Properties.getString("AWSSecretKey"), "UTF-8"), Properties.getString("S3Bucket"),
-				"20150820_135352.wmv");
+				filename);
 
 		return source;
-
-	}
-
-	/**
-	 * Creates the destination mock.
-	 *
-	 * @return the string
-	 * @throws UnsupportedEncodingException
-	 *             the unsupported encoding exception
-	 */
-	public static String createDestinationMock() throws UnsupportedEncodingException {
-
-		final String destination = String.format(Properties.getString("S3FileEndpoint"),
-				URLEncoder.encode(Properties.getString("AWSAccessKey"), "UTF-8"),
-				URLEncoder.encode(Properties.getString("AWSSecretKey"), "UTF-8"), Properties.getString("S3Bucket"),
-				"20150820_135352.mp4");
-
-		return destination;
 
 	}
 
@@ -132,14 +119,20 @@ public class MockUtil {
 	 *
 	 * @param baseXML
 	 *            the base xml
+	 * @param source
+	 *            the source
+	 * @param destination
+	 *            the destination
 	 * @return the string
 	 * @throws UnsupportedEncodingException
 	 *             the unsupported encoding exception
 	 */
-	public static String createMockPayload(final String baseXML) throws UnsupportedEncodingException {
+	public static String createMockPayload(final String baseXML, final String source, final String destination)
+			throws UnsupportedEncodingException {
 
 		String xml = String.format(baseXML, Properties.getString("EncodingUserId"),
-				Properties.getString("EncodingUserKey"), createSouceMock(), createDestinationMock());
+				Properties.getString("EncodingUserKey"), source,
+				destination);
 
 		return "xml=" + URLEncoder.encode(xml, "UTF8");
 	}
