@@ -9,16 +9,12 @@
 	
 	file.live('change', function(e){
 		
-		if(e.srcElement.files[0] && e.srcElement.files[0].type.match('video.*')){
+		if(e.srcElement.files[0]){
 			
 			submit.removeAttr("disabled");
 			
 		}else{
 			
-			if(e.srcElement.files[0]){
-				alert("Please, select a video file!");
-				file.val("");
-			}
 			submit.attr("disabled", "disabled");
 			
 		}
