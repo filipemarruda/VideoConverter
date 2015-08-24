@@ -18,8 +18,18 @@
 				
 				if(response.status && response.status!="Finished"){
 					
-					status.html("Econding.com: "+response.status+"...");
-					ecodingWorkflow(mediaId);
+					if(response.status == "Error"){
+						
+						status.html("An error ocurred with your video conversion, send an email to filipemarruda@gmail.com!");
+						loading.hide();
+						videoForm.show();
+						
+					}else{
+						
+						status.html("Econding.com: "+response.status+"...");
+						ecodingWorkflow(mediaId);
+						
+					}
 					
 				}else if(response.status == "Finished"){
 					
@@ -55,7 +65,8 @@
 				if(percentComplete == 100){
 					status.html("Sending video to Amazon S3...");
 				}else{
-					status.html("Uploading...");
+					var percentCompleteText = percentComplete+"%";
+					status.html("Uploading("+percentCompleteText+")...");
 				}
 				var loadingTag = '<img src="images/loading.gif">';
 				loading.html(loadingTag);
