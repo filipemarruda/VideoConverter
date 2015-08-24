@@ -105,7 +105,12 @@ public class XMLParser {
 	 */
 	public static String getMediaStatus(final String xml)
 			throws XPathExpressionException, ParserConfigurationException, SAXException, IOException {
-		return getStringFromXML("//status", xml);
+		String status = getStringFromXML("//status", xml);
+		final String progress = getStringFromXML("//progress", xml);
+		if(progress != null && !"".equals(progress)){
+			status = status + "("+progress+"%)";
+		}
+		return status;
 	}
 
 	/**
