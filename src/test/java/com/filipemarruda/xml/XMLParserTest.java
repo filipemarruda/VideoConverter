@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import com.filipemarruda.util.MockUtil;
+import com.filipemarruda.MockUtil;
 
 public class XMLParserTest {
 

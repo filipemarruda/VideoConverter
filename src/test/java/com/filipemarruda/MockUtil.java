@@ -1,10 +1,9 @@
-package com.filipemarruda.util;
+package com.filipemarruda;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import com.filipemarruda.bundle.Properties;
-import com.filipemarruda.encoding.EncodingHandler;
 
 public class MockUtil {
 
@@ -26,14 +25,6 @@ public class MockUtil {
 	
 	public static String createProcessMediaResponseMockXML(){
 		return "<?xml version='1.0'?><response><message>Ok</message></response>";
-	}
-	
-	public static EncodingHandler createEncodingHandlerMock() {
-
-		final EncodingHandler eH = new EncodingHandler(Properties.getString("EncodingEndpoint"),
-				Properties.getString("EncodingUserId"), Properties.getString("EncodingUserKey"));
-		return eH;
-
 	}
 
 	public static String createSouceMock() throws UnsupportedEncodingException {
