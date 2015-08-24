@@ -41,25 +41,99 @@
  *****************************************************************/
 package com.filipemarruda.http;
 
-import static org.junit.Assert.assertEquals;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collection;
 
 import javax.servlet.http.Part;
 
-import org.junit.Test;
-
 /**
- * JUnit test for RequestHelper.
+ * The Class SimpleTestPart.
  */
-public class RequestHelperTest {
+public class SimpleTestPart implements Part {
 
-	/**
-	 * Test case for method extractFileName.
+	/* (non-Javadoc)
+	 * @see javax.servlet.http.Part#write(java.lang.String)
 	 */
-	@Test
-	public void extractFileName(){
-		Part part = new SimpleTestPart();
-		final String filename = RequestHelper.extractFileName(part);
-		assertEquals(filename, "filename");
+	@Override
+	public void write(String arg0) throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 	
+	/* (non-Javadoc)
+	 * @see javax.servlet.http.Part#getSize()
+	 */
+	@Override
+	public long getSize() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	/* (non-Javadoc)
+	 * @see javax.servlet.http.Part#getName()
+	 */
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see javax.servlet.http.Part#getInputStream()
+	 */
+	@Override
+	public InputStream getInputStream() throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see javax.servlet.http.Part#getHeaders(java.lang.String)
+	 */
+	@Override
+	public Collection<String> getHeaders(String arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see javax.servlet.http.Part#getHeaderNames()
+	 */
+	@Override
+	public Collection<String> getHeaderNames() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see javax.servlet.http.Part#getHeader(java.lang.String)
+	 */
+	@Override
+	public String getHeader(String arg0) {
+		String result = null;
+		if("content-disposition".equals(arg0)){
+			result = "name=\"bla\";filename=\"filename\";";
+		}
+		return result;
+	}
+	
+	/* (non-Javadoc)
+	 * @see javax.servlet.http.Part#getContentType()
+	 */
+	@Override
+	public String getContentType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see javax.servlet.http.Part#delete()
+	 */
+	@Override
+	public void delete() throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
