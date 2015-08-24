@@ -107,7 +107,7 @@ public class XMLParser {
 			throws XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		String status = getStringFromXML("//status", xml);
 		final String progress = getStringFromXML("//progress", xml);
-		if(progress != null && !"".equals(progress)){
+		if(!"New".equals(status) && !"Ready to process".equals(status) && !"Finished".equals(status) && progress != null && !"".equals(progress)){
 			status = status + "("+progress+"%)";
 		}
 		return status;
