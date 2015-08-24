@@ -8,10 +8,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import com.filipemarruda.MockUtil;
 import com.filipemarruda.bundle.Properties;
 import com.filipemarruda.http.HttpConnector;
 import com.filipemarruda.http.IHttpConnector;
-import com.filipemarruda.util.MockUtil;
 
 public class EncodingHandlerTest {
 
@@ -66,7 +66,7 @@ public class EncodingHandlerTest {
 		// setup mocks
 		when(httpConnector.simplePost(Properties.getString("EncodingEndpoint"),
 				MockUtil.createMockPayload(Properties.getString("EncodingAddMediaXML")))).thenReturn("Success");
-		final EncodingHandler eH = MockUtil.createEncodingHandlerMock();
+		final EncodingHandler eH = createEncodingHandlerMock();
 		// injecting mock
 		eH.setHttpConnector(httpConnector);
 
@@ -94,7 +94,7 @@ public class EncodingHandlerTest {
 		// setup mocks
 		when(httpConnector.simplePost(Properties.getString("EncodingEndpoint"),
 				MockUtil.createMockPayload(Properties.getString("EncodingAddMediaBenchmarkXML")))).thenReturn("Success");
-		final EncodingHandler eH = MockUtil.createEncodingHandlerMock();
+		final EncodingHandler eH = createEncodingHandlerMock();
 		// injecting mock
 		eH.setHttpConnector(httpConnector);
 
@@ -106,6 +106,15 @@ public class EncodingHandlerTest {
 
 	}
 
+
+	
+	public static EncodingHandler createEncodingHandlerMock() {
+
+		final EncodingHandler eH = new EncodingHandler(Properties.getString("EncodingEndpoint"),
+				Properties.getString("EncodingUserId"), Properties.getString("EncodingUserKey"));
+		return eH;
+
+	}
 	
 
 }
