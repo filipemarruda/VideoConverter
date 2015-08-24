@@ -41,6 +41,7 @@
  *****************************************************************/
 package com.filipemarruda.http.servlets;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -140,18 +141,30 @@ public class Convert extends HttpServlet {
 		final Part filePart = request.getPart("videoFile");
 		final String filename = RequestHelper.extractFileName(filePart);
 		final String extension = filename.substring(filename.lastIndexOf("."));
+		File file = null;
 
 		try (InputStream fileContent = filePart.getInputStream()) {
 
-			final String s3File = s3.putObject(bucketName, FileHandler.inputStreamToFile(fileContent), extension);
+			file = FileHandler.inputStreamToFile(fileContent);
+
+		} catch (IOException e) {
+			
+			out.write("{ \"error\" : \"" + e.getMessage() + "\" }");
+			
+		}
+		
+		try {
+			
+			String s3File = s3.putObject(bucketName, file, extension);
 			final String source = s3.createFileEndpoint(bucketUrl, s3File + extension);
 			final String destination = s3.createFileEndpoint(bucketUrl, s3File + ".mp4");
 			final String mediaId = mW.start(source, destination);
 			out.write("{ \"mediaId\" : " + mediaId + "}");
-
-		} catch (AmazonClientException | InterruptedException | XPathExpressionException | ParserConfigurationException
-				| SAXException e) {
+			
+		} catch (AmazonClientException | InterruptedException | XPathExpressionException | ParserConfigurationException | SAXException e) {
+			
 			out.write("{ \"error\" : \"" + e.getMessage() + "\" }");
+			
 		}
 
 	}
