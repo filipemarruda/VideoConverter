@@ -108,7 +108,7 @@ public class XMLParser {
 		String status = getStringFromXML("//status", xml);
 		final String progress = getStringFromXML("//progress", xml);
 		if(!"New".equals(status) && !"Ready to process".equals(status) && !"Finished".equals(status) && progress != null && !"".equals(progress)){
-			status = status + "("+progress+"%)";
+			status = status + "("+progress+")";
 		}
 		return status;
 	}

@@ -1,45 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-<title>Video Converter</title>
-<link rel="stylesheet" href="styles/styles.css" type="text/css"
-	media="screen">
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>Video Converter</title>
+	<link rel="stylesheet" href="styles/bootstrap.min.css"/>
+	<link rel="stylesheet" href="styles/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="styles/styles.css">
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/jquery.form.js"></script>
+	<script src="js/bootstrap.min.js"></script>
 </head>
 
 <body>
-	<div id="content" class="container">
 
-		<div style="height: 10px;"></div>
+	<div class="container">
+		<div class="header clearfix">
+        	<h1 class="text-muted">Video Converter</h1>
+      	</div>
 
-		<h3>Video Converter</h3>
-		<p>Welcome to newest video-converter web service</p>
+		<div class="jumbotron">
 
-		<h4>Contents of this Project</h4>
+			<h3>Welcome to newest video-converter web service</h3>
 
-		<p>This service is hosted on amazon web services and uses
-			encoding.com video converter service. When you upload your video file
-			this is saved in an arbitrary amazon s3 bucket and a request to the
-			encoding.com converter workers is triggered. This ones will convert
-			your video and put back to the amazon s3 bucket in the mp4 format,
-			ready to be played by any web browser player. After that we will
-			redirect you to a page witch contains a HTML5 video tag pointing to
-			the converted video.</p>
+			<strong>Contents of this Project</strong>
+			<br/>
+			<small>
+				This service is hosted on amazon web services and uses
+				encoding.com video converter service. When you upload your video file
+				this is saved in an arbitrary amazon s3 bucket and a request to the
+				encoding.com converter workers is triggered. This ones will convert
+				your video and put back to the amazon s3 bucket in the mp4 format,
+				ready to be played by any web browser player. After that we will
+				redirect you to a page witch contains a HTML5 video tag pointing to
+				the converted video.
+			</small>
+			<br/>
+			<small>Enjoy your experience!</small>
+			<br/>
+			<br/>
 
-		<p>Enjoy your experience!</p>
+			<form id="videoForm" action="convert.do" method="post" enctype="multipart/form-data">
+				<input id="file" type="file" name="videoFile"><br> 
+				<input id="submit" type="submit" value="Submit video" disabled="disabled" class="btn btn-primary btn-lg">
+			</form>
 
-		<form id="videoForm" action="convert.do" method="post" enctype="multipart/form-data">
-			<input id="file" type="file" name="videoFile"><br> 
-			<input id="submit" type="submit" value="Submit video" disabled="disabled">
-		</form>
+			<div id="progress-wraper" class="progress" style="display: none">
+			  <div id="progress" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="200" style="width: 0%">
+			    <span id="status"></span>
+			  </div>
+			</div>
+			<div id="video"></div>
 
-		<div id="loading"></div>
-		<div id="status"></div>
-		<div id="video"></div>
+		</div>
 	</div>
-	<script src="js/jquery.js"></script>
-	<script src="js/jquery.form.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>

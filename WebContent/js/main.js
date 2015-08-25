@@ -1,15 +1,18 @@
 (function() {
 
-	var loading = $('#loading');
+
+	var doc = $(document);
+	var progressWraper = $('#progress-wraper');
+	var progress = $('#progress');
 	var status = $('#status');
 	var video = $('#video');
 	var videoForm = $('#videoForm');
 	var file = $('#file');
 	var submit = $('#submit');
 	
-	file.live('change', function(e){
+	doc.on('change', '#file', function(e){
 		
-		if(e.srcElement.files[0]){
+		if(e.target.files[0]){
 			
 			submit.removeAttr("disabled");
 			
@@ -37,11 +40,25 @@
 					if(response.status == "Error"){
 						
 						status.html("An error ocurred with your video conversion, send an email to filipemarruda@gmail.com!");
-						loading.hide();
+						progress.removeClass("active");
+						progress.addClass("progress-bar-danger");
 						videoForm.show();
 						
 					}else{
 						
+						var preg = /.*\(([0-9]+.[0-9]+)\)/;
+						var group = preg.exec(response.status);
+						
+						if(group){
+							
+							var encodingStatusProgess = parseInt(group[1]);
+							var percentComplete = encodingStatusProgess+100;
+							var progressStyle = "width: " +(percentComplete/2)+"%";
+							progress.attr("aria-valuenow", percentComplete);
+							progress.attr("style", progressStyle);
+
+						}
+
 						status.html("Econding.com: "+response.status+"...");
 						ecodingWorkflow(mediaId);
 						
@@ -49,8 +66,7 @@
 					
 				}else if(response.status == "Finished"){
 					
-					loading.empty();
-					status.empty();
+					progressWraper.hide();
 					var videoTag = '<video width="320" height="240" controls>'
 								  + '<source src="'+response.destination+'" type="video/mp4">'
 								  + '<source src="movie.ogg" type="video/ogg">'
@@ -60,9 +76,11 @@
 					video.html(videoTag);
 					
 				}else if(response.error){
-					
-					var errorTag = '<span class="error">'+response.error+'</span>'; 
-					status.html(errorTag);
+
+					progress.removeClass("active");
+					progress.addClass("progress-bar-danger");
+					status.html(response.error);
+
 				}
 				
 			}
@@ -73,6 +91,7 @@
 	$('form').ajaxForm(
 		{
 			beforeSend : function() {
+				progressWraper.show();
 				status.empty();
 				videoForm.hide();
 			},
@@ -84,8 +103,11 @@
 					var percentCompleteText = percentComplete+"%";
 					status.html("Uploading("+percentCompleteText+")...");
 				}
-				var loadingTag = '<img src="images/loading.gif">';
-				loading.html(loadingTag);
+
+				var progressStyle = "width: " +(percentComplete/2)+"%";
+				progress.attr("aria-valuenow", percentComplete);
+				progress.attr("style", progressStyle);
+
 			},
 			complete : function(xhr) {
 				
@@ -95,6 +117,8 @@
 				if(response.mediaId){
 					ecodingWorkflow(response.mediaId);
 				}else if(response.error){
+					progress.removeClass("active");
+					progress.addClass("progress-bar-danger");
 					status.html(response.error);
 				}
 				
