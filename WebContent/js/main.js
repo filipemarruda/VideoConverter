@@ -17,7 +17,7 @@
 			if(!e.target.files[0].type || e.target.files[0].type.startsWith("video")){
 				submit.removeAttr("disabled");
 			}else{
-				alert("Plese, choose an video file!");
+				alert("Please, choose an video file!");
 				submit.attr("disabled", "disabled");
 				file.val("");
 			}
