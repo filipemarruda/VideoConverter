@@ -37,7 +37,7 @@
 				
 				if(response.status && response.status!="Finished"){
 					
-					if(response.status == "Error"){
+					if(response.status.startsWith("Error")){
 						
 						status.html("An error ocurred with your video conversion, send an email to filipemarruda@gmail.com!");
 						progress.removeClass("active");
