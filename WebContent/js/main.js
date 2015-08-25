@@ -17,7 +17,7 @@
 			if(!e.target.files[0].type || e.target.files[0].type.startsWith("video")){
 				submit.removeAttr("disabled");
 			}else{
-				alert("Please, choose an video file!");
+				alert("Please choose a video file!");
 				submit.attr("disabled", "disabled");
 				file.val("");
 			}
@@ -37,6 +37,12 @@
 		$.ajax({
 			method: "GET",
 			url: url,
+			error : function(xhr) {
+				status.html("An error ocurred with your video conversion, send an email to filipemarruda@gmail.com!");
+				progress.removeClass("active");
+				progress.addClass("progress-bar-danger");
+				videoForm.show();
+			},
 			success : function(xhr) {
 				
 				response=JSON.parse(xhr);
@@ -114,6 +120,12 @@
 				progress.attr("aria-valuenow", percentComplete);
 				progress.attr("style", progressStyle);
 
+			},
+			error : function(xhr) {
+				status.html("An error ocurred with your video conversion, send an email to filipemarruda@gmail.com!");
+				progress.removeClass("active");
+				progress.addClass("progress-bar-danger");
+				videoForm.show();
 			},
 			complete : function(xhr) {
 				
